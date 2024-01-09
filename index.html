@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSS агрегатор</title>
+</head>
+
+<body class="d-flex min-vh-100 flex-column">
+  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-break">
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-primary full-article" href="#" role="button" target="_blank"
+            rel="noopener noreferrer">Читать полностью </a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <main class="flex-grow-1 bg-light">
+    <section class="container-fluid p-5 bg-dark">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 mx-auto text-white">
+          <h1 class="display-3">RSS агрегатор</h1>
+          <p class="lead">Начните читать RSS сегодня! Это легко, это красиво.</p>
+          <form action="">
+            <div class="row">
+              <div class="col">
+                <div class="form-floating">
+                  <input name="url" id="url-input" aria-label="url" class="form-control" autofocus required
+                    placeholder="RSS Ссылка" autocomplete="off">
+                  <label class="text-dark" for="input_1">RSS Ссылка</label>
+                </div>
+              </div>
+              <button type="submit" class="col-auto btn btn-lg btn-primary px-5 ms-2">Добавить</button>
+            </div>
+          </form>
+          <p class="text-muted mt-2 mb-0">Пример: https://ru.hexlet.io/lessons.rss</p>
+          <p class="feedback m-0 position-absolute small text-danger"></p>
+        </div>
+      </div>
+    </section>
+    <section class="container-fluid p-5 bg-light container-xxl">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 order-1 mx-auto posts"></div>
+        <div class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer border-top bg-light">
+    <div class="container">
+      <div class="text-center p-3">
+        <a href="https://ru.hexlet.io/professions/frontend/projects/11" target="_blank">Hexlet</a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
