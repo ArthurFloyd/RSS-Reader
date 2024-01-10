@@ -1,8 +1,14 @@
+import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 export default {
   mode: process.env.NODE_ENV || 'development',
   entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.join(path.resolve(), './dist'),
+    clean: true,
+  },
   devServer: {
     open: true,
     host: 'localhost',
