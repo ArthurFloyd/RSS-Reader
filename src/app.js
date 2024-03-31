@@ -52,6 +52,7 @@ const app = () => {
     form: {
       valid: true,
       errors: {},
+      url: '',
     },
     // uiState: {
     //   visitedLinksIds: new Set(),
@@ -63,16 +64,21 @@ const app = () => {
 
   // fetchNewPosts(watchedState);
 
-  const { form } = elements;
+  // const { form } = elements;
 
   elements.form.addEventListener('input', () => {
+    // const { value } = e.target;
+    // watchedState.content.feeds = value;
+    // const errors = validate(watchedState.content.feeds);
+    // watchedState.form.errors = errors;
+    // watchedState.form.valid = isEmpty(errors);
     watchedState.process.error = null;
     watchedState.process.state = 'filling';
   });
 
   // form.focus();
   // form.reset();
-  form.addEventListener('submit', (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const url = formData.get('url');
@@ -87,13 +93,13 @@ const app = () => {
         watchedState.content.feeds.push({ link: validUrl });
 
         watchedState.process.state = 'sending';
-        //   return getAxiosResponse(link);
+        // return link;
         // })
         // .then((response) => {
-        //   const { feed, posts } = parse(response.data.contents);
+        //   const feed = response;
         //   const feedId = uniqueId();
 
-      //   watchedState.content.feeds.push({ ...feed, feedId, link: url });
+        // watchedState.content.feeds.push({ ...feed, feedId, link: url });
       //   addPosts(feedId, posts, watchedState);
       //   watchedState.process.state = 'finished';
       })
