@@ -1,3 +1,5 @@
+/* eslint no-param-reassign: ["error", { "props": true,
+"ignorePropertyModificationsFor": ["state", "elements"] }] */
 // Обработчик ошибок
 const errorHandler = (elements, error) => {
   elements.feedback.classList.remove('text-success');
