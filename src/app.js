@@ -1,29 +1,15 @@
 import { string } from 'yup';
 import onChange from 'on-change';
-// import i18n from 'i18next';
-// import axios from 'axios';
-// import { uniqueId } from 'lodash';
 
 import render from './view.js';
-// import ru from './locales/ru.js';
 
-// Валидатор
 const validate = (url, links) => {
   const schema = string().trim().required().url()
     .notOneOf(links);
   return schema.validate(url);
 };
 
-// Приложение
 const app = () => {
-  // const i18nInstance = i18n.createInstance();
-  // i18nInstance
-  //   .init({
-  //     lng: 'ru',
-  //     debug: false,
-  //     resources: { ru },
-  //   });
-
   const elements = {
     form: document.querySelector('.rss-form'),
     feedback: document.querySelector('.feedback'),
@@ -39,74 +25,42 @@ const app = () => {
     },
   };
 
-  // Состояние
   const state = {
-    process: {
-      state: 'filling',
+    validUrl: {
+      links: [],
+      valid: true,
       error: null,
     },
-    content: {
-      feeds: [],
-      posts: [],
-    },
-    form: {
-      valid: true,
-      errors: {},
-      url: '',
-    },
-    // uiState: {
-    //   visitedLinksIds: new Set(),
-    //   modalPostId: null,
-    // },
   };
 
   const watchedState = onChange(state, render(state, elements));
 
-  // fetchNewPosts(watchedState);
+  // elements.form.addEventListener('click', () => {
+  //   state = 'filling';
+  //   state = null;
+  // });
 
-  // const { form } = elements;
-
-  elements.form.addEventListener('input', () => {
-    // const { value } = e.target;
-    // watchedState.content.feeds = value;
-    // const errors = validate(watchedState.content.feeds);
-    // watchedState.form.errors = errors;
-    // watchedState.form.valid = isEmpty(errors);
-    watchedState.process.error = null;
-    watchedState.process.state = 'filling';
-  });
-
-  // form.focus();
-  // form.reset();
+  elements.form.focus();
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const url = formData.get('url');
-    const addedLinks = watchedState.content.feeds.map(({ link }) => link);
-
+    const data = new FormData(elements.form);
+    // console.log(data.get('url'));
+    const url = data.get('url');
+    // state.validUrl.links.push(url);
+    const addedLinks = watchedState.validUrl.links;
+    // validate(url, addedLinks);
+    // console.log(validate(url, state.validUrl.links));
     validate(url, addedLinks)
-      .then((validUrl) => {
-        if (addedLinks.includes(validUrl)) {
-          throw new Error('URL already exists in feeds');
-        }
-
-        watchedState.content.feeds.push({ link: validUrl });
-
-        watchedState.process.state = 'sending';
-        // return link;
-        // })
-        // .then((response) => {
-        //   const feed = response;
-        //   const feedId = uniqueId();
-
-        // watchedState.content.feeds.push({ ...feed, feedId, link: url });
-      //   addPosts(feedId, posts, watchedState);
-      //   watchedState.process.state = 'finished';
+      .then((link) => {
+        watchedState.validUrl.links.push(link);
+        watchedState.validUrl.valid = true;
+        console.log(state.validUrl.valid);
       })
       .catch((error) => {
         const errorMessage = error.message ?? 'defaultError';
-        watchedState.process.error = errorMessage;
-        watchedState.process.state = 'error';
+        watchedState.validUrl.error = errorMessage;
+        watchedState.validUrl.valid = false;
+        console.log(state.validUrl.valid);
       });
   });
 };
