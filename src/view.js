@@ -8,6 +8,8 @@ const render = (state, elements, translate) => () => {
       elements.feedback.classList.remove('text-danger');
       elements.feedback.textContent = '';
       break;
+    case 'sending':
+      break;
     case 'finished':
       elements.input.classList.remove('is-invalid');
       elements.feedback.classList.remove('text-danger');
