@@ -1,10 +1,14 @@
+/* eslint no-param-reassign: ["error", { "props": true,
+"ignorePropertyModificationsFor": ["state", "elements", "watchedState"] }] */
 import { string, setLocale } from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
 import axios from 'axios';
+import { uniqueId } from 'lodash';
 
 import render from './view.js';
 import ru from './locales/ru.js';
+import parser from './parser.js';
 
 const validate = (url, links) => {
   const schema = string().trim().required().url()
@@ -18,6 +22,11 @@ const getAxiosResponse = (url) => {
   preparedURL.searchParams.set('disableCache', 'true');
   preparedURL.searchParams.set('url', url);
   return axios.get(preparedURL);
+};
+
+const addPost = (feedId, posts, state) => {
+  const normalizedPosts = posts.map((post) => ({ ...post, feedId, id: uniqueId() }));
+  state.content.posts = [...state.content.posts, normalizedPosts];
 };
 
 const app = () => {
@@ -56,8 +65,8 @@ const app = () => {
         error: null,
       },
       content: {
-        feed: [],
-        post: [],
+        feeds: [],
+        posts: [],
       },
     };
 
@@ -75,7 +84,7 @@ const app = () => {
       // console.log(data.get('url'));
       const url = data.get('url');
       // state.validUrl.links.push(url);
-      const addedLinks = watchedState.content.feed;
+      const addedLinks = watchedState.content.feeds.map(({ link }) => link);
       // validate(urßl, addedLinks);
       // console.log(validate(url, state.validUrl.links));
       validate(url, addedLinks)
@@ -84,9 +93,16 @@ const app = () => {
           return getAxiosResponse(link);
         })
         .then((response) => {
-          watchedState.content.feed.push(response);
+          // console.log('!!', response);
+          const { feed, posts } = parser(response.data.contents);
+          const feedId = uniqueId;
+          // watchedState.content.feed.push(response);
+          watchedState.content.feeds.push({ ...feed, feedId, link: url });
+          addPost(feedId, posts, watchedState);
           watchedState.process.state = 'finished';
           console.log(initState.process.state);
+          console.log(initState.content.feeds);
+          console.log(initState.process.posts);
         })
         .catch((error) => {
           const errorMessage = error.message ?? 'defaultError';
