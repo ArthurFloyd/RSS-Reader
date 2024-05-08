@@ -1,6 +1,7 @@
 import { string, setLocale } from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
+import axios from 'axios';
 
 import render from './view.js';
 import ru from './locales/ru.js';
@@ -9,6 +10,14 @@ const validate = (url, links) => {
   const schema = string().trim().required().url()
     .notOneOf(links);
   return schema.validate(url);
+};
+
+const getAxiosResponse = (url) => {
+  const allOriginalLink = 'https://allorigins.hexlet.app/get';
+  const preparedURL = new URL(allOriginalLink);
+  preparedURL.searchParams.set('disableCache', 'true');
+  preparedURL.searchParams.set('url', url);
+  return axios.get(preparedURL);
 };
 
 const app = () => {
@@ -47,16 +56,17 @@ const app = () => {
         error: null,
       },
       content: {
-        links: [],
+        feed: [],
+        post: [],
       },
     };
 
     const watchedState = onChange(initState, render(initState, elements, translate));
 
-    // elements.form.addEventListener('click', () => {
-    //   state = 'filling';
-    //   state = null;
-    // });
+    elements.form.addEventListener('input', () => {
+      watchedState.process.state = 'filling';
+      watchedState.process.error = null;
+    });
 
     elements.form.focus();
     elements.form.addEventListener('submit', (e) => {
@@ -65,12 +75,16 @@ const app = () => {
       // console.log(data.get('url'));
       const url = data.get('url');
       // state.validUrl.links.push(url);
-      const addedLinks = watchedState.content.links;
+      const addedLinks = watchedState.content.feed;
       // validate(urßl, addedLinks);
       // console.log(validate(url, state.validUrl.links));
       validate(url, addedLinks)
         .then((link) => {
-          watchedState.content.links.push(link);
+          watchedState.process.state = 'sending';
+          return getAxiosResponse(link);
+        })
+        .then((response) => {
+          watchedState.content.feed.push(response);
           watchedState.process.state = 'finished';
           console.log(initState.process.state);
         })

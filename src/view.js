@@ -17,13 +17,16 @@ const render = (state, elements, translate) => () => {
       elements.feedback.textContent = translate('loaded');
       elements.input.focus();
       elements.form.reset();
+      elements.btn.disabled = false;
+      elements.input.disabled = false;
+
       break;
     case 'error':
       elements.input.classList.add('is-invalid');
       elements.feedback.classList.remove('text-success');
       elements.feedback.classList.add('text-danger');
       elements.feedback.textContent = translate(`errors.${state.process.error.replace(/ /g, '')}`);
-      console.log('!!!', state.process.error);
+      // console.log('!!!', state.process.error);
       break;
     default:
       break;
