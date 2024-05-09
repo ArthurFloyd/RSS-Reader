@@ -29,6 +29,26 @@ const addPost = (feedId, posts, state) => {
   state.content.posts = [...state.content.posts, normalizedPosts];
 };
 
+const timeout = 5000;
+
+const searchNewPost = (state) => {
+  const promises = state.content.feeds
+    .map(({ link, id }) => getAxiosResponse(link)
+      .then((response) => {
+        const { posts } = parser(response.data.contents);
+        const addedLinks = state.content.posts.map((post) => post.link);
+        const newPost = posts.filter((post) => !addedLinks.includes(post.link));
+        if (newPost.length > 0) {
+          addPost(id, newPost, state);
+        }
+        return Promise.resolve();
+      }));
+  Promise.allSettled(promises)
+    .finally(() => {
+      setTimeout(() => searchNewPost(state), timeout);
+    });
+};
+
 const app = () => {
   const i18nextInstance = i18next.createInstance();
 
@@ -71,6 +91,8 @@ const app = () => {
     };
 
     const watchedState = onChange(initState, render(initState, elements, translate));
+
+    searchNewPost(watchedState);
 
     elements.form.addEventListener('input', () => {
       watchedState.process.state = 'filling';
