@@ -10,14 +10,12 @@ const renderPosts = (state, element, translate) => {
     listGroupItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
     const a = document.createElement('a');
-    a.classList.add('fw-bold');
+    a.classList.add(state.uiState.visitedLinksIds.has(post.id) ? ('fw-normal', 'link-secondary') : 'fw-bold');
     a.href = post.link;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
     a.setAttribute('data-id', post.id);
     a.textContent = post.title;
-    // console.log('!@!', post);
-    console.log(a);
 
     const button = document.createElement('button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
@@ -60,7 +58,6 @@ const makeContainer = (title, state, elements, translate) => {
     posts: (element) => renderPosts(state, element, translate),
     feeds: (element) => renderFeeds(state, element),
   };
-
   elements[title].innerHTML = '';
 
   const card = document.createElement('div');
@@ -103,21 +100,39 @@ const finisheHandler = (elements, state, translate) => {
   elements.feedback.textContent = translate('success');
 };
 
-const render = (state, elements, translate) => () => {
-  elements.input.focus();
-  switch (state.process.state) {
-    case 'filling':
+const renderModalWindow = (elements, state, postId) => {
+  const post = state.content.posts
+    .find(({ id }) => id === postId);
+  const { title, description, link } = post;
+  elements.modal.title.textContent = title;
+  elements.modal.body.textContent = description;
+  elements.modal.btn.href = link;
+};
+
+const render = (state, elements, translate) => (path, value) => {
+  const renderMapping = {
+    filling: () => {
       elements.input.classList.remove('is-invalid');
       elements.feedback.classList.remove('text-danger');
       elements.feedback.textContent = '';
+    },
+    sending: () => {
+      elements.btn.disabled = false;
+      elements.input.disabled = false;
+    },
+    finished: () => finisheHandler(elements, state, translate),
+    error: () => errorHandler(elements, state.process.error, translate),
+  };
+  switch (path) {
+    case 'process.state':
+      renderMapping[state.process.state]();
       break;
-    case 'sending':
+    case 'uiState.visitedLinksIds':
+    case 'content.post':
+      makeContainer('posts', state, elements, translate);
       break;
-    case 'finished':
-      finisheHandler(elements, state, translate);
-      break;
-    case 'error':
-      errorHandler(elements, state.process.error, translate);
+    case 'uiState.modalPostId':
+      renderModalWindow(elements, state, value);
       break;
     default:
       break;

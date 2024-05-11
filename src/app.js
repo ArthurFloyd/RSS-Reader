@@ -88,6 +88,10 @@ const app = () => {
         feeds: [],
         posts: [],
       },
+      uiState: {
+        visitedLinksIds: new Set(),
+        modalPostId: null,
+      },
     };
 
     const watchedState = onChange(initState, render(initState, elements, translate));
@@ -103,26 +107,20 @@ const app = () => {
     elements.form.addEventListener('submit', (e) => {
       e.preventDefault();
       const data = new FormData(elements.form);
-      // console.log(data.get('url'));
       const url = data.get('url');
-      // state.validUrl.links.push(url);
       const addedLinks = watchedState.content.feeds.map(({ link }) => link);
-      // validate(urßl, addedLinks);
-      // console.log(validate(url, state.validUrl.links));
+
       validate(url, addedLinks)
         .then((link) => {
           watchedState.process.state = 'sending';
           return getAxiosResponse(link);
         })
         .then((response) => {
-          // console.log('!!', response);
           const { feed, posts } = parser(response.data.contents);
           const feedId = uniqueId;
-          // watchedState.content.feed.push(response);
           watchedState.content.feeds.push({ ...feed, feedId, link: url });
           addPost(feedId, posts, watchedState);
           watchedState.process.state = 'finished';
-          // console.log(initState.process.state);
           console.log(initState.content.feeds);
           console.log(initState.process.posts);
         })
@@ -130,8 +128,20 @@ const app = () => {
           const errorMessage = error.message ?? 'defaultError';
           watchedState.process.error = errorMessage;
           watchedState.process.state = 'error';
-          // console.log(initState.process.state);
         });
+    });
+
+    elements.modal.modalElement.addEventListener('show.bs.modal', (e) => {
+      const postId = e.relatedTarget.getAttribute('data-id');
+      watchedState.uiState.visitedLinksIds.add(postId);
+      watchedState.uiState.modalPostId = postId;
+    });
+
+    elements.posts.addEventListener('click', (e) => {
+      const postId = e.target.dataset.id;
+      if (postId) {
+        watchedState.uiState.visitedLinksIds.add(postId);
+      }
     });
   });
 };

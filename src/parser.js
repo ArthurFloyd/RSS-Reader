@@ -22,6 +22,5 @@ export default (data) => {
       description: postDescription,
     };
   });
-  console.log('??', feed, posts);
   return { feed, posts };
 };
