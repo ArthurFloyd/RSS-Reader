@@ -8,6 +8,9 @@ export default {
       networkError: 'Ошибка сети',
       defaultError: 'Упс.. Что-то пошло не так..',
     },
-    loaded: 'RSS успешно загружен!',
+    success: 'RSS успешно загружен!',
+    preview: 'Просмотр',
+    feeds: 'Фиды',
+    posts: 'Посты',
   },
 };

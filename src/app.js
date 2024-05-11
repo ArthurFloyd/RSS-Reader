@@ -26,7 +26,7 @@ const getAxiosResponse = (url) => {
 
 const addPost = (feedId, posts, state) => {
   const normalizedPosts = posts.map((post) => ({ ...post, feedId, id: uniqueId() }));
-  state.content.posts = [...state.content.posts, normalizedPosts];
+  state.content.posts = [...state.content.posts, ...normalizedPosts];
 };
 
 const timeout = 5000;
@@ -37,9 +37,9 @@ const searchNewPost = (state) => {
       .then((response) => {
         const { posts } = parser(response.data.contents);
         const addedLinks = state.content.posts.map((post) => post.link);
-        const newPost = posts.filter((post) => !addedLinks.includes(post.link));
-        if (newPost.length > 0) {
-          addPost(id, newPost, state);
+        const newPosts = posts.filter((post) => !addedLinks.includes(post.link));
+        if (newPosts.length > 0) {
+          addPost(id, newPosts, state);
         }
         return Promise.resolve();
       }));
@@ -122,7 +122,7 @@ const app = () => {
           watchedState.content.feeds.push({ ...feed, feedId, link: url });
           addPost(feedId, posts, watchedState);
           watchedState.process.state = 'finished';
-          console.log(initState.process.state);
+          // console.log(initState.process.state);
           console.log(initState.content.feeds);
           console.log(initState.process.posts);
         })
@@ -130,7 +130,7 @@ const app = () => {
           const errorMessage = error.message ?? 'defaultError';
           watchedState.process.error = errorMessage;
           watchedState.process.state = 'error';
-          console.log(initState.process.state);
+          // console.log(initState.process.state);
         });
     });
   });
