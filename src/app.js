@@ -1,5 +1,7 @@
 /* eslint no-param-reassign: ["error", { "props": true,
 "ignorePropertyModificationsFor": ["state", "elements", "watchedState"] }] */
+import './styles.scss';
+import 'bootstrap';
 import { string, setLocale } from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
@@ -118,11 +120,10 @@ const app = () => {
         .then((response) => {
           const { feed, posts } = parser(response.data.contents);
           const feedId = uniqueId;
+
           watchedState.content.feeds.push({ ...feed, feedId, link: url });
           addPost(feedId, posts, watchedState);
           watchedState.process.state = 'finished';
-          console.log(initState.content.feeds);
-          console.log(initState.process.posts);
         })
         .catch((error) => {
           const errorMessage = error.message ?? 'defaultError';

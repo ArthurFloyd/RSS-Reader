@@ -57,6 +57,7 @@ const makeContainer = (title, state, elements, translate) => {
     posts: (element) => renderPosts(state, element, translate),
     feeds: (element) => renderFeeds(state, element),
   };
+
   elements[title].innerHTML = '';
 
   const card = document.createElement('div');
@@ -76,7 +77,6 @@ const makeContainer = (title, state, elements, translate) => {
 };
 
 const errorHandler = (elements, error, translate) => {
-  elements.input.classList.add('is-invalid');
   elements.feedback.classList.remove('text-success');
   elements.feedback.classList.add('text-danger');
   elements.feedback.textContent = translate(`errors.${error.replace(/ /g, '')}`);
@@ -86,6 +86,8 @@ const errorHandler = (elements, error, translate) => {
 };
 
 const finisheHandler = (elements, state, translate) => {
+  elements.feedback.textContent = '';
+
   makeContainer('posts', state, elements, translate);
   makeContainer('feeds', state, elements, translate);
 
@@ -94,7 +96,6 @@ const finisheHandler = (elements, state, translate) => {
   elements.btn.disabled = false;
   elements.input.disabled = false;
 
-  elements.input.classList.remove('is-invalid');
   elements.feedback.classList.remove('text-danger');
   elements.feedback.classList.add('text-success');
   elements.feedback.textContent = translate('success');
@@ -117,8 +118,8 @@ const render = (state, elements, translate) => (path, value) => {
       elements.feedback.textContent = '';
     },
     sending: () => {
-      elements.btn.disabled = false;
-      elements.input.disabled = false;
+      elements.btn.disabled = true;
+      elements.input.disabled = true;
     },
     finished: () => finisheHandler(elements, state, translate),
     error: () => errorHandler(elements, state.process.error, translate),
@@ -134,6 +135,7 @@ const render = (state, elements, translate) => (path, value) => {
     case 'uiState.modalPostId':
       renderModalWindow(elements, state, value);
       break;
+
     default:
       break;
   }
