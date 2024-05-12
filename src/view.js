@@ -4,7 +4,6 @@ const renderPosts = (state, element, translate) => {
   const listGroup = document.createElement('ul');
   listGroup.classList.add('list-group', 'border-0', 'rounded-0');
 
-  console.log('!@!', state.content.posts);
   state.content.posts.forEach((post) => {
     const listGroupItem = document.createElement('li');
     listGroupItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');

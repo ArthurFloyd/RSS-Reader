@@ -3,7 +3,7 @@ export default (data) => {
   const parserData = domParser.parseFromString(data, 'application/xml');
 
   const errorNode = parserData.querySelector('parsererror');
-  if (errorNode) throw new Error('parseErorr');
+  if (errorNode) throw new Error('parseError');
 
   const channel = parserData.querySelector('channel');
   const title = channel.querySelector('title').textContent;
