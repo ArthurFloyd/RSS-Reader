@@ -43,7 +43,6 @@ const searchNewPost = (state) => {
         if (newPosts.length > 0) {
           addPost(id, newPosts, state);
         }
-        return Promise.resolve();
       }));
   Promise.allSettled(promises)
     .finally(() => {
