@@ -2,13 +2,15 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "type": "module",
-  "description": "[![Actions Status](https://github.com/ArthurFloyd/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ArthurFloyd/frontend-project-11/actions)",
-  "main": "index.js",
-  "scripts": {},
+  "description": "rss-reader is a service for aggregating RSS feeds that makes it easy to read a variety of sources, such as blogs. It allows you to add an unlimited number of RSS feeds, updates them and adds new entries to the total stream.",
+  "main": "src/index.js",
+  "scripts": {
+    "develop": "npx webpack serve",
+    "build": "rm -rf dist && NODE_ENV=production npx webpack"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.12.11",
     "css-loader": "^6.8.1",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -23,7 +25,6 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
-    "@playwright/test": "^1.44.0",
     "axios": "^1.6.7",
     "bootstrap": "^5.3.2",
     "i18next": "^23.10.0",
