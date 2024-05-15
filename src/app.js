@@ -11,13 +11,13 @@ import { uniqueId } from 'lodash';
 import render from './view.js';
 import ru from './locales/ru.js';
 import parser from './parser.js';
-
+// Валидатор
 const validate = (url, links) => {
   const schema = string().trim().required().url()
     .notOneOf(links);
   return schema.validate(url);
 };
-
+// Запрос
 const getAxiosResponse = (url) => {
   const allOriginalLink = 'https://allorigins.hexlet.app/get';
   const preparedURL = new URL(allOriginalLink);
@@ -49,10 +49,10 @@ const searchNewPost = (state) => {
       setTimeout(() => searchNewPost(state), timeout);
     });
 };
-
+// Приложение
 const app = () => {
   const i18nextInstance = i18next.createInstance();
-
+  // Инициализация
   i18nextInstance.init({
     lng: 'ru',
     debug: false,
@@ -60,6 +60,7 @@ const app = () => {
       ru,
     },
   }).then((translate) => {
+    // Элементы
     const elements = {
       form: document.querySelector('.rss-form'),
       feedback: document.querySelector('.feedback'),
@@ -79,7 +80,7 @@ const app = () => {
       mixed: { notOneOf: 'existsUrl' },
       string: { url: 'invalidUrl', required: 'mustNotBeEmpty' },
     });
-
+    // Состояние
     const initState = {
       process: {
         state: 'filling',
