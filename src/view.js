@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: ["error", { "props": true,
 "ignorePropertyModificationsFor": ["state", "elements"] }] */
+// Рендер постов
 const renderPosts = (state, element, translate) => {
   const listGroup = document.createElement('ul');
   listGroup.classList.add('list-group', 'border-0', 'rounded-0');
@@ -30,6 +31,7 @@ const renderPosts = (state, element, translate) => {
   element.append(listGroup);
 };
 
+// Рендер фидов
 const renderFeeds = (state, element) => {
   const listGroup = document.createElement('ul');
   listGroup.classList.add('list-group', 'border-0', 'rounded-0');
@@ -52,6 +54,7 @@ const renderFeeds = (state, element) => {
   element.append(listGroup);
 };
 
+// Создатель контейнеров
 const makeContainer = (title, state, elements, translate) => {
   const containerMapping = {
     posts: (element) => renderPosts(state, element, translate),
@@ -76,6 +79,7 @@ const makeContainer = (title, state, elements, translate) => {
   containerMapping[title](card);
 };
 
+// Обработчик ошибок
 const errorHandler = (elements, error, translate) => {
   elements.feedback.classList.remove('text-success');
   elements.feedback.classList.add('text-danger');
@@ -85,6 +89,7 @@ const errorHandler = (elements, error, translate) => {
   elements.input.disabled = false;
 };
 
+// Обработчик успешного добавления поста
 const finisheHandler = (elements, state, translate) => {
   elements.feedback.textContent = '';
 
@@ -101,6 +106,7 @@ const finisheHandler = (elements, state, translate) => {
   elements.feedback.textContent = translate('success');
 };
 
+// Заполнение модального окна
 const renderModalWindow = (elements, state, postId) => {
   const post = state.content.posts
     .find(({ id }) => id === postId);
@@ -110,6 +116,7 @@ const renderModalWindow = (elements, state, postId) => {
   elements.modal.btn.href = link;
 };
 
+// Рендер
 const render = (state, elements, translate) => (path, value) => {
   const renderMapping = {
     filling: () => {
