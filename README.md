@@ -22,19 +22,19 @@ node >= 22.0.0
 ## Установка / Setup
 
 ```sh
-$ make install
+make install
 ```
 
 ## Запуск (режим разработки) / start (developer mode)
 
 ```sh
-$ make develop
+make develop
 ```
 
 ## Сборка / Build
 
 ```sh
-$ make build
+make build
 ```
 ## Ссылка на приложение / Link to app
 [RSS Агрегатор](https://frontend-project-11-delta-three.vercel.app/)
