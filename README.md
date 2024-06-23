@@ -16,7 +16,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
 ## Системные требования / System requirements
 
 ```sh
-node >= 22.0.0
+node 22.0.0
 ```
 
 ## Установка / Setup
