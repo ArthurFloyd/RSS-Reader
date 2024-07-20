@@ -5,7 +5,7 @@
 
 # RSS агрегатор / RSS Reader
 
-Сервис для агрегации RSS-потоков, с помощью которых удобно читать разнообразные источники, например, блоги. Он позволяет добавлять неограниченное количество RSS-лент, сам их обновляет и добавляет новые записи в общий поток.
+[RSS-reader](https://frontend-project-11-delta-three.vercel.app/) – is a service for aggregating RSS feeds that makes it easy to read a variety of sources, such as blogs. It allows you to add an unlimited number of RSS feeds, updates them and adds new entries to the total stream.
 
 ## Поддержка браузера / Browser support:
 
